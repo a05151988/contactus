@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1.0" client="site" method="upgrade">
+    <name>MOD_CONTACTUS_TITLE</name>
+    <author>Ryan Yu</author>
+    <version>1.0.0</version>
+    <description>MOD_CONTACTUS_DESC</description>
+	<languages folder="language">
+	   <language tag="zh-TW">zh-TW/zh-TW.mod_contactus.ini</language>
+	</languages>
+    <files>
+        <filename>mod_contactus.xml</filename>
+        <filename module="mod_contactus">mod_contactus.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="contactus_id" type="text" default="contactus" label="MOD_CONTACTUS_CUSTOM_ID_LABEL" description="MOD_CONTACTUS_CUSTOM_ID_DESC"></field>
+                <field name="show_type" type="radio" default="button" label="MOD_CONTACTUS_SHOW_TYPE_LABEL" description="MOD_CONTACTUS_SHOW_TYPE_DESC">
+                    <option value="button">MOD_CONTACTUS_SHOW_TYPE_BUTTON</option>
+                    <option value="page">MOD_CONTACTUS_SHOW_TYPE_PAGE</option>
+                </field>
+                <field name="recaptcha_verify" type="radio" default="1" label="MOD_CONTACTUS_USE_RECAPTCHA_LABEL" description="MOD_CONTACTUS_USE_RECAPTCHA_DESC">
+                    <option value="1">MOD_CONTACTUS_OPTION_YES</option>
+                    <option value="0">MOD_CONTACTUS_OPTION_NO</option>
+                </field>
+                <field name="btn_class" type="text" default="btn btn-success" label="MOD_CONTACTUS_BTN_CLASS_LABEL" description="MOD_CONTACTUS_BTN_CLASS_DESC"></field>
+                <field name="btn_style" type="text" default="" label="MOD_CONTACTUS_BTN_STYLE_LABEL" description="MOD_CONTACTUS_BTN_STYLE_DESC"></field>
+                <field name="btn_icon_class" type="text" default="fa fa-send fa-fw" label="MOD_CONTACTUS_BTN_ICON_CLASS_LABEL" description="MOD_CONTACTUS_BTN_ICON_CLASS_DESC"></field>
+                <field name="btn_label" type="text" default="" label="MOD_CONTACTUS_BTN_SHOW_MODAL_TITLE_LABEL" description="MOD_CONTACTUS_BTN_SHOW_MODAL_TITLE_DESC"></field>
+                <field name="form_title" type="text" default="" label="MOD_CONTACTUS_FORM_TITLE_LABEL" description="MOD_CONTACTUS_FORM_TITLE_DESC"></field>
+                <field name="form_title_icon_class" type="text" default="" label="MOD_CONTACTUS_FORM_TITLE_ICON_CLASS_LABEL" description="MOD_CONTACTUS_FORM_TITLE_ICON_CLASS_DESC"></field>
+                <field name="form_desc" type="textarea" default="" label="MOD_CONTACTUS_FORM_DESC_LABEL" description="MOD_CONTACTUS_FORM_DESC_DESC"></field>
+                <field name="form_elements" type="textarea" default="" label="MOD_CONTACTUS_FORM_ELEMENTS_LABEL" description="MOD_CONTACTUS_FORM_ELEMENTS_DESC"></field>
+                <field name="send_btn_class" type="text" default="btn btn-success" label="MOD_CONTACTUS_SEND_BTN_CLASS_LABEL" description="MOD_CONTACTUS_SEND_BTN_CLASS_DESC"></field>
+                <field name="send_btn_style" type="text" default="" label="MOD_CONTACTUS_SEND_BTN_STYLE_LABEL" description="MOD_CONTACTUS_SEND_BTN_STYLE_DESC"></field>
+                <field name="send_btn_icon_class" type="text" default="fa fa-send fa-fw" label="MOD_CONTACTUS_SEND_BTN_ICON_CLASS_LABEL" description="MOD_CONTACTUS_SEND_BTN_ICON_CLASS_DESC"></field>
+                <field name="send_btn_label" type="text" default="" label="MOD_CONTACTUS_SEND_BTN_TITLE_LABEL" description="MOD_CONTACTUS_SEND_BTN_TITLE_DESC"></field>
+                <field name="close_btn_class" type="text" default="btn btn-danger" label="MOD_CONTACTUS_CLOSE_BTN_CLASS_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_CLASS_DESC"></field>
+                <field name="close_btn_style" type="text" default="" label="MOD_CONTACTUS_CLOSE_BTN_STYLE_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_STYLE_DESC"></field>
+                <field name="close_btn_icon_class" type="text" default="fa fa-remove fa-fw" label="MOD_CONTACTUS_CLOSE_BTN_ICON_CLASS_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_ICON_CLASS_DESC"></field>
+                <field name="close_btn_label" type="text" default="" label="MOD_CONTACTUS_CLOSE_BTN_TITLE_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_TITLE_DESC"></field>
+                <field name="css" type="textarea" default="" label="MOD_CONTACTUS_CSS_LABEL" description="MOD_CONTACTUS_CSS_DESC"></field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
