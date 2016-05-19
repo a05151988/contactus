@@ -27,6 +27,7 @@
                     <option value="1">MOD_CONTACTUS_OPTION_YES</option>
                     <option value="0">MOD_CONTACTUS_OPTION_NO</option>
                 </field>
+                <field name="recaptcha_site_key" type="text" default="" label="MOD_CONTACTUS_SITE_KEY_LABEL" description="MOD_CONTACTUS_SITE_KEY_DESC"></field>
                 <field name="btn_class" type="text" default="btn btn-success" label="MOD_CONTACTUS_BTN_CLASS_LABEL" description="MOD_CONTACTUS_BTN_CLASS_DESC"></field>
                 <field name="btn_style" type="text" default="" label="MOD_CONTACTUS_BTN_STYLE_LABEL" description="MOD_CONTACTUS_BTN_STYLE_DESC"></field>
                 <field name="btn_icon_class" type="text" default="fa fa-send fa-fw" label="MOD_CONTACTUS_BTN_ICON_CLASS_LABEL" description="MOD_CONTACTUS_BTN_ICON_CLASS_DESC"></field>
