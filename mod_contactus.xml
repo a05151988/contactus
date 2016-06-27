@@ -40,6 +40,7 @@
                 <field name="send_btn_style" type="text" default="" label="MOD_CONTACTUS_SEND_BTN_STYLE_LABEL" description="MOD_CONTACTUS_SEND_BTN_STYLE_DESC"></field>
                 <field name="send_btn_icon_class" type="text" default="fa fa-send fa-fw" label="MOD_CONTACTUS_SEND_BTN_ICON_CLASS_LABEL" description="MOD_CONTACTUS_SEND_BTN_ICON_CLASS_DESC"></field>
                 <field name="send_btn_label" type="text" default="" label="MOD_CONTACTUS_SEND_BTN_TITLE_LABEL" description="MOD_CONTACTUS_SEND_BTN_TITLE_DESC"></field>
+                <field name="send_message" type="text" default="" label="MOD_CONTACTUS_SEND_MESSAGE_LABEL" description="MOD_CONTACTUS_SEND_MESSAGE_DESC"></field>
                 <field name="close_btn_class" type="text" default="btn btn-danger" label="MOD_CONTACTUS_CLOSE_BTN_CLASS_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_CLASS_DESC"></field>
                 <field name="close_btn_style" type="text" default="" label="MOD_CONTACTUS_CLOSE_BTN_STYLE_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_STYLE_DESC"></field>
                 <field name="close_btn_icon_class" type="text" default="fa fa-remove fa-fw" label="MOD_CONTACTUS_CLOSE_BTN_ICON_CLASS_LABEL" description="MOD_CONTACTUS_CLOSE_BTN_ICON_CLASS_DESC"></field>
