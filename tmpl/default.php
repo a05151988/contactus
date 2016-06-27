@@ -5,7 +5,7 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
 ?>
     <style type="text/css">
         .form-control {
-            width: 90%;
+            width: 100%%;
             padding: 4px 6px;
         }
 
@@ -24,7 +24,7 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
             -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
             -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            width: 90%;
+            width: 95%;
             resize: vertical;
         }
 
@@ -46,9 +46,11 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
     <script type="text/javascript">
         jQuery(function () {
             jQuery('#<?php echo $submitBtnId; ?>').click(function () {
+					var btn = jQuery(this);
+					btn.showLoading();
                     var valid = true;
                     var first = null;
-                    jQuery('#<?php echo $formId; ?> input[type=text],#<?php echo $formId; ?> input[type=email],#<?php echo $formId; ?> textarea').each(function (idx, item) {
+                    jQuery('#<?php echo $id; ?> input[type=text],#<?php echo $id; ?> input[type=email],#<?php echo $id; ?> textarea').each(function (idx, item) {
                         var element = jQuery(item);
                         var type = element.attr('type');
                         if(type == 'email'){
@@ -66,27 +68,34 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
                     if (jQuery('.g-recaptcha').length > 0)
                         jQuery('.g-recaptcha').removeClass('has-error');
                     if (valid) {
+						var data = jQuery('#<?php echo $id; ?>').find("[name]:not(iframe)");
                         jQuery.ajax({
                             type: 'POST',
-                            data: jQuery('#<?php echo $formId; ?>').serialize(),
+                            data: data.serialize(),
                             url: '<?php echo $ajaxUrl; ?>',
                             dataType: 'json',
                             success: function (response) {
                                 if (response == true) {
-                                    alert(Joomla.JText._('MOD_CONTACTUS_MESSAGE_SENDED'))
+                                    noty({layout:'center',type:'success',theme:'relax',text:jQuery('#<?php echo $msgId; ?>').val()})
                                     <?php if($type == 'button') : ?>
+									jQuery('#<?php echo $id; ?> input:not([type=hidden], [type=radio]),#<?php echo $id; ?> textarea').val("")
                                     jQuery('#<?php echo $modalId; ?>').modal("hide");
                                     <?php elseif($type == 'page') : ?>
-                                    jQuery('#<?php echo $formId; ?> input:not([type=hidden], [type=radio]),#<?php echo $formId; ?> textarea').val("")
+                                    jQuery('#<?php echo $id; ?> input:not([type=hidden], [type=radio]),#<?php echo $id; ?> textarea').val("")
                                     <?php endif; ?>
                                     <?php if ($recaptcha == 1) echo "grecaptcha.reset();"; ?>
+									btn.hideLoading();
                                 } else if (response == 'recaptcha') {
                                     jQuery('.g-recaptcha>div>div').addClass('has-error');
+									btn.hideLoading();
                                 }
                             }
                         });
-                    } else
-                        first.focus();
+                    } else{
+						btn.hideLoading();
+						first.focus();
+					}
+                        
                 }
             )
         })
@@ -95,16 +104,12 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
             return regex.test(email);
         }
     </script>
+<input type="hidden" id="<?php echo $msgId; ?>" value="<?php echo $sendMessage; ?>">
 <?php if ($type == 'button'): ?>
-    <style type="text/css">
-        .table th, .table td {
-            border: 0;
-        }
-    </style>
     <script type="text/javascript">
         jQuery(function () {
             jQuery('#<?php echo $btnId; ?>').click(function () {
-                jQuery('#<?php echo $formId; ?> input:not([type=hidden], [type=radio]),#<?php echo $formId; ?> textarea').val("")
+                jQuery('#<?php echo $id; ?> input:not([type=hidden], [type=radio]),#<?php echo $id; ?> textarea').val("")
                 jQuery('#<?php echo $modalId; ?>').modal("show");
             })
         })
@@ -122,69 +127,67 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
                             <i class="<?php echo $formTitleIconClass; ?>"></i>&nbsp;<?php echo $formTitle; ?>
                         </h4>
                         <?php if ($formTitleDesc) : ?>
-                            <small><?php echo $formTitleDesc; ?></small>
+                            <small class="pull-xs-right"><?php echo $formTitleDesc; ?></small>
                         <?php endif; ?>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" id="<?php echo $formId; ?>">
-                            <?php foreach ($elements as $element) : ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-                                        <label
-                                            <?php if ($element->type == 'text' || $element->type == 'textarea') : ?>for="<?php echo $element->name; ?>" <?php endif; ?>
-                                            class=" required"><?php echo $element->label; ?>
-                                            <?php if ($element->required == true): ?>
-                                                <span class="star">&nbsp;*</span>
-                                            <?php endif; ?>
-                                        </label>
-                                    </div>
-                                    <div class="controls">
-                                        <?php if ($element->type == 'text') : ?>
-                                            <input id="<?php echo $element->name; ?>"
-                                                   name="<?php echo $element->name; ?>"
-                                                   type="text"
-                                                   style="margin-bottom:0;"
-                                                   class="form-control" <?php if ($element->required) echo "required"; ?>
-                                                   placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
-                                        <?php elseif ($element->type == 'textarea') : ?>
-                                            <textarea id="<?php echo $element->name; ?>"
-                                                      name="<?php echo $element->name; ?>"
-                                                      style="margin-bottom:0;"
-                                                      class="form-control-textarea" <?php if ($element->required) echo "required"; ?>
-                                                      placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>"></textarea>
-                                        <?php elseif ($element->type == 'select') : ?>
-                                            <select name="<?php echo $element->name; ?>"
-                                                    class="form-control" <?php if ($element->required) echo "required"; ?>
-                                                    style="margin-bottom:0;">
-                                                <?php foreach ($element->options as $option) : ?>
-                                                    <option
-                                                        value="<?php echo $option; ?>"><?php echo $option; ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        <?php elseif ($element->type == 'radio') : ?>
-                                            <?php foreach ($element->options as $idx => $option) : ?>
-                                                <label><input name="<?php echo $element->name; ?>" type="radio"
-                                                              value="<?php echo $option; ?>" <?php if ($idx == 0) echo "checked"; ?>>&nbsp;&nbsp;<?php echo $option; ?>
-                                                </label>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                            <?php if ($recaptcha == 1) : ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-                                        <label><?php echo JText::_('MOD_CONTACTS_RECAPTCHA_VERIFY'); ?>
-                                            <span class="star">&nbsp;*</span>
-                                        </label>
-                                    </div>
-                                    <div class="controls">
-                                        <div class="g-recaptcha"
-                                             data-sitekey="<?php echo $siteKey; ?>"></div>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-                        </form>
+						<fieldset>
+							<dl class="dl-horizontal">
+								<?php foreach ($elements as $element) : ?>
+										<dt class="col-sm-3"><?php echo $element->label; ?>
+											<?php if ($element->required == true): ?>
+												<span class="star">&nbsp;*</span>
+											<?php endif; ?>
+										</dt>
+										<dd class="col-sm-9 text-xs-left">
+											<?php if ($element->type == 'text') : ?>
+												<input id="<?php echo $element->name; ?>"
+													   name="<?php echo $element->name; ?>"
+													   type="text"
+													   style="margin-bottom:0;"
+													   class="form-control" <?php if ($element->required) echo "required"; ?>
+													   placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
+											<?php elseif ($element->type == 'email') : ?>
+												<input id="<?php echo $element->name; ?>" name="<?php echo $element->name; ?>"
+													   type="email"
+													   style="margin-bottom:0;"
+													   class="form-control" <?php if ($element->required) echo "required"; ?>
+													   placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
+											<?php elseif ($element->type == 'textarea') : ?>
+												<textarea id="<?php echo $element->name; ?>"
+														  name="<?php echo $element->name; ?>"
+														  style="margin-bottom:0;"
+														  class="form-control-textarea" <?php if ($element->required) echo "required"; ?>
+														  placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>"></textarea>
+											<?php elseif ($element->type == 'select') : ?>
+												<select name="<?php echo $element->name; ?>"
+														class="c-select" <?php if ($element->required) echo "required"; ?>
+														style="margin-bottom:0;">
+													<?php foreach ($element->options as $option) : ?>
+														<option
+															value="<?php echo $option; ?>"><?php echo $option; ?></option>
+													<?php endforeach; ?>
+												</select>
+											<?php elseif ($element->type == 'radio') : ?>
+												<?php foreach ($element->options as $idx => $option) : ?>
+													<label><input name="<?php echo $element->name; ?>" type="radio"
+																  value="<?php echo $option; ?>" <?php if ($idx == 0) echo "checked"; ?>>&nbsp;&nbsp;<?php echo $option; ?>
+													</label>
+												<?php endforeach; ?>
+											<?php endif; ?>
+										</dd>
+								<?php endforeach; ?>
+								<?php if ($recaptcha == 1) : ?>
+									<dt class="col-sm-3">
+										<?php echo JText::_('MOD_CONTACTS_RECAPTCHA_VERIFY'); ?>
+										<span class="star">&nbsp;*</span>
+									</dt>
+									<dd class="col-sm-9">
+										<div class="g-recaptcha" data-sitekey="<?php echo $siteKey; ?>"></div>
+									</dd>
+								<?php endif; ?>
+							</dl>
+						</fieldset>
                     </div>
                     <div class="modal-footer">
                         <button class="<?php echo $sendBtnClass; ?>" id="<?php echo $submitBtnId; ?>" type="button"
@@ -202,86 +205,74 @@ JText::script('MOD_CONTACTUS_MESSAGE_SENDED');
     </div>
 <?php elseif ($type == 'page'): ?>
     <div id="<?php echo $id; ?>">
-        <form method="POST" id="<?php echo $formId; ?>" class="form-horizontal">
-            <?php if ($formTitle) : ?>
-                <h4>
-                    <i class="<?php echo $formTitleIconClass; ?>"></i>&nbsp;<?php echo $formTitle; ?>
-                </h4>
-            <?php endif; ?>
-            <?php if ($formTitleDesc) : ?>
-                <small><?php echo $formTitleDesc; ?></small>
-            <?php endif; ?>
-            <fieldset class="well">
-                <?php foreach ($elements as $element) : ?>
-                    <div class="control-group">
-                        <div class="control-label">
-                            <label
-                                <?php if ($element->type == 'text' || $element->type == 'textarea') : ?>for="<?php echo $element->name; ?>" <?php endif; ?>
-                                class=" required"><?php echo $element->label; ?>
-                                <?php if ($element->required == true): ?>
-                                    <span class="star">&nbsp;*</span>
-                                <?php endif; ?>
-                            </label>
-                        </div>
-                        <div class="controls">
-                            <?php if ($element->type == 'text') : ?>
-                                <input id="<?php echo $element->name; ?>" name="<?php echo $element->name; ?>"
-                                       type="text"
-                                       style="margin-bottom:0;"
-                                       class="form-control" <?php if ($element->required) echo "required"; ?>
-                                       placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
-                            <?php elseif ($element->type == 'email') : ?>
-                                <input id="<?php echo $element->name; ?>" name="<?php echo $element->name; ?>"
-                                       type="email"
-                                       style="margin-bottom:0;"
-                                       class="form-control" <?php if ($element->required) echo "required"; ?>
-                                       placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
-                            <?php elseif ($element->type == 'textarea') : ?>
-                                <textarea id="<?php echo $element->name; ?>" name="<?php echo $element->name; ?>"
-                                          style="margin-bottom:0;"
-                                          class="form-control-textarea" <?php if ($element->required) echo "required"; ?>
-                                          placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>"></textarea>
-                            <?php elseif ($element->type == 'select') : ?>
-                                <select name="<?php echo $element->name; ?>"
-                                        class="form-control" <?php if ($element->required) echo "required"; ?>
-                                        style="margin-bottom:0;">
-                                    <?php foreach ($element->options as $option) : ?>
-                                        <option
-                                            value="<?php echo $option; ?>"><?php echo $option; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            <?php elseif ($element->type == 'radio') : ?>
-                                <?php foreach ($element->options as $idx => $option) : ?>
-                                    <label><input name="<?php echo $element->name; ?>" type="radio"
-                                                  value="<?php echo $option; ?>" <?php if ($idx == 0) echo "checked"; ?>>&nbsp;&nbsp;<?php echo $option; ?>
-                                    </label>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-                <?php if ($recaptcha == 1) : ?>
-                    <div class="control-group">
-                        <div class="control-label">
-                            <label><?php echo JText::_('MOD_CONTACTS_RECAPTCHA_VERIFY'); ?>
-                                <span class="star">&nbsp;*</span>
-                            </label>
-                        </div>
-                        <div class="controls">
-                            <div class="g-recaptcha"
-                                 data-sitekey="<?php echo $siteKey; ?>"></div>
-                        </div>
-                    </div>
-                <?php endif; ?>
-                <div class="control-group">
-                    <div class="controls">
-                        <button class="<?php echo $sendBtnClass; ?>" id="<?php echo $submitBtnId; ?>" type="button"
-                                style="<?php echo $sendBtnStyle; ?>">
-                            <i class="<?php echo $sendBtnIconClass; ?>"></i>&nbsp;<?php echo $sendBtnLabel ?>
-                        </button>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+		<?php if ($formTitle) : ?>
+			<h4 style="border-bottom:1px solid #d8d8d8;" class="p-b-1">
+				<i class="<?php echo $formTitleIconClass; ?>"></i>&nbsp;<?php echo $formTitle; ?>
+			</h4>
+		<?php endif; ?>
+		<?php if ($formTitleDesc) : ?>
+			<small class="pull-xs-right"><?php echo $formTitleDesc; ?></small>
+			<div class="clearfix"></div>
+		<?php endif; ?>
+		<fieldset>
+			<dl class="dl-horizontal">
+				<?php foreach ($elements as $element) : ?>
+						<dt class="col-sm-3"><?php echo $element->label; ?>
+							<?php if ($element->required == true): ?>
+								<span class="star">&nbsp;*</span>
+							<?php endif; ?>
+						</dt>
+						<dd class="col-sm-9 text-xs-left">
+							<?php if ($element->type == 'text') : ?>
+								<input id="<?php echo $element->name; ?>"
+									   name="<?php echo $element->name; ?>"
+									   type="text"
+									   style="margin-bottom:0;"
+									   class="form-control" <?php if ($element->required) echo "required"; ?>
+									   placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
+							<?php elseif ($element->type == 'email') : ?>
+								<input id="<?php echo $element->name; ?>" name="<?php echo $element->name; ?>"
+									   type="email"
+									   style="margin-bottom:0;"
+									   class="form-control" <?php if ($element->required) echo "required"; ?>
+									   placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>">
+							<?php elseif ($element->type == 'textarea') : ?>
+								<textarea id="<?php echo $element->name; ?>"
+										  name="<?php echo $element->name; ?>"
+										  style="margin-bottom:0;"
+										  class="form-control-textarea" <?php if ($element->required) echo "required"; ?>
+										  placeHolder="<?php echo JText::_('MOD_CONTACTUS_OPTION_PLEASE_FILL'); ?><?php echo $element->label; ?>"></textarea>
+							<?php elseif ($element->type == 'select') : ?>
+								<select name="<?php echo $element->name; ?>"
+										class="c-select" <?php if ($element->required) echo "required"; ?>
+										style="margin-bottom:0;">
+									<?php foreach ($element->options as $option) : ?>
+										<option
+											value="<?php echo $option; ?>"><?php echo $option; ?></option>
+									<?php endforeach; ?>
+								</select>
+							<?php elseif ($element->type == 'radio') : ?>
+								<?php foreach ($element->options as $idx => $option) : ?>
+									<label><input name="<?php echo $element->name; ?>" type="radio"
+												  value="<?php echo $option; ?>" <?php if ($idx == 0) echo "checked"; ?>>&nbsp;&nbsp;<?php echo $option; ?>
+									</label>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</dd>
+				<?php endforeach; ?>
+				<?php if ($recaptcha == 1) : ?>
+					<dt class="col-sm-3">
+						<?php echo JText::_('MOD_CONTACTS_RECAPTCHA_VERIFY'); ?>
+						<span class="star">&nbsp;*</span>
+					</dt>
+					<dd class="col-sm-9">
+						<div class="g-recaptcha" data-sitekey="<?php echo $siteKey; ?>"></div>
+					</dd>
+				<?php endif; ?>
+			</dl>
+			<button class="<?php echo $sendBtnClass; ?>" id="<?php echo $submitBtnId; ?>" type="button" style="<?php echo $sendBtnStyle; ?>">
+				<i class="<?php echo $sendBtnIconClass; ?>"></i>&nbsp;<?php echo $sendBtnLabel ?>
+			</button>
+		</fieldset>
     </div>
 <?php endif;
